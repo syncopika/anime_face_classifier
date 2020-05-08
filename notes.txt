@@ -1,0 +1,16 @@
+https://www.cs.auckland.ac.nz/~m.rezaei/Tutorials/Creating_a_Cascade_of_Haar-Like_Classifiers_Step_by_Step.pdf
+https://coding-robin.de/2013/07/22/train-your-own-opencv-haar-classifier.html
+https://memememememememe.me/post/training-haar-cascades/
+https://stackoverflow.com/questions/22504258/opencv-createsamples-has-no-error-but-no-samples-found
+https://github.com/sonots/tutorial-haartraining/blob/master/HaarTraining/bin/createtestsamples.pl
+https://answers.opencv.org/question/124638/opencv_createsamples-doesnt-create-samples/
+https://answers.opencv.org/question/127484/trying-to-run-createsamples-unsuccessfully-though/
+https://answers.opencv.org/question/16977/verify-vector-file-and-background-file/
+
+perl create_samples.pl positive_image_list.txt negative_image_list.txt samples 1500 "opencv_createsamples -bgcolor 0 -bgthresh 0 -maxxangle 1.1 -maxyangle 1.1 maxzangle 0.5 -maxidev 40 -w 300 -h 300"
+
+opencv_createsamples -vec imgs/vector.vec -w 640 -h 480 -show
+
+
+maybe try tensorflow?
+https://missinglink.ai/guides/tensorflow/tensorflow-face-recognition-three-quick-tutorials/
