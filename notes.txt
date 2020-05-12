@@ -6,10 +6,20 @@ https://github.com/sonots/tutorial-haartraining/blob/master/HaarTraining/bin/cre
 https://answers.opencv.org/question/124638/opencv_createsamples-doesnt-create-samples/
 https://answers.opencv.org/question/127484/trying-to-run-createsamples-unsuccessfully-though/
 https://answers.opencv.org/question/16977/verify-vector-file-and-background-file/
-
-perl create_samples.pl positive_image_list.txt negative_image_list.txt samples 1500 "opencv_createsamples -bgcolor 0 -bgthresh 0 -maxxangle 1.1 -maxyangle 1.1 maxzangle 0.5 -maxidev 40 -w 300 -h 300"
+http://johnallen.github.io/opencv-object-detection-tutorial/
+https://stackoverflow.com/questions/32971241/how-to-get-image-width-and-height-in-opencv
+https://stackoverflow.com/questions/53121910/opencv-createsamples-assertion-failed-error
+https://answers.opencv.org/question/64431/number-of-stages-or-maxfalsealarmrate/
+https://answers.opencv.org/question/62437/traincascade-parameters-numpos-and-numneg/
+https://stackoverflow.com/questions/35086142/opencv-detectmultiscale-gives-too-many-points-out-of-the-object
 
 opencv_createsamples -vec imgs/vector.vec -w 640 -h 480 -show
+
+- use OpenCV annotation tool to create the vector for training.
+- it might be good to also create vectors of each positive image and then merge them but I don't have the merge tool atm.
+
+opencv_annotation --annotations=annotations.txt --images=positive_images
+opencv_createsamples -vec positive_training_samples.vec -info annotations.txt -num 500 -bgcolor 0 -bgthresh 0 -maxxangle 1.1 -maxyangle 1.1 maxzangle 0.5 -maxidev 40 -w 300 -h 300 -show
 
 
 maybe try tensorflow?

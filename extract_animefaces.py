@@ -7,7 +7,9 @@ import os
 import numpy as np
 from shutil import copyfile
 
-face_det = cv2.CascadeClassifier("OpenCV_FaceCascade\lbpcascade_animeface.xml")
+face_det = cv2.CascadeClassifier("cascade_classifier\cascade.xml")
+
+#face_det = cv2.CascadeClassifier("OpenCV_FaceCascade\lbpcascade_animeface.xml")
 
 #face_det = cv2.CascadeClassifier("OpenCV_FaceCascade\haarcascade_frontalface_default.xml")
 #face_det2 = cv2.CascadeClassifier("OpenCV_FaceCascade\haarcascade_frontalface_alt2.xml")
@@ -34,19 +36,22 @@ def extract_anime_faces(directory):
 		faces = face_det.detectMultiScale(grayscale_img, scaleFactor=1.05, minNeighbors=6, minSize=(30,30))
 		
 		# find and save face
+		count = 0
 		for (x, y, w, h) in faces:
-			print(f"got face for: {file_name}")
-			grayscale_img = grayscale_img[y:y+h, x:x+w]
+			print(f"found feature for: {file_name}")
+			print(f"dimensions: x->{x}, y->{y}, w->{w}, h->{h}")
+			feature = grayscale_img[y:y+h, x:x+w]
 			try:
-				dest = f"{directory}_extracted_dataset"
+				dest = f"{directory}_extracted_dataset2"
 				if not os.path.exists(dest):
 					os.makedirs(dest)
 					print(f"created: {dest}")
 				
-				out = cv2.resize(grayscale_img, (350, 350))
-				cv2.imwrite(f"{dest}\{file_name}", out)
-			except:
-				print(f"failure for img: {file_name}")
+				out = cv2.resize(feature, (350, 350))
+				cv2.imwrite(f"{dest}\{count}_{file_name}", out)
+			except Exception as err:
+				print(f"{err}: failure for img: {file_name}")
+			count += 1
 		
 		
 extract_anime_faces("anime_faces")
