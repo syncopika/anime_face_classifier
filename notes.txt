@@ -3,14 +3,15 @@ https://coding-robin.de/2013/07/22/train-your-own-opencv-haar-classifier.html
 https://memememememememe.me/post/training-haar-cascades/
 https://stackoverflow.com/questions/22504258/opencv-createsamples-has-no-error-but-no-samples-found
 https://github.com/sonots/tutorial-haartraining/blob/master/HaarTraining/bin/createtestsamples.pl
+http://johnallen.github.io/opencv-object-detection-tutorial/
+https://docs.opencv.org/master/dc/d88/tutorial_traincascade.html
 https://answers.opencv.org/question/124638/opencv_createsamples-doesnt-create-samples/
 https://answers.opencv.org/question/127484/trying-to-run-createsamples-unsuccessfully-though/
 https://answers.opencv.org/question/16977/verify-vector-file-and-background-file/
-http://johnallen.github.io/opencv-object-detection-tutorial/
-https://stackoverflow.com/questions/32971241/how-to-get-image-width-and-height-in-opencv
-https://stackoverflow.com/questions/53121910/opencv-createsamples-assertion-failed-error
 https://answers.opencv.org/question/64431/number-of-stages-or-maxfalsealarmrate/
 https://answers.opencv.org/question/62437/traincascade-parameters-numpos-and-numneg/
+https://stackoverflow.com/questions/32971241/how-to-get-image-width-and-height-in-opencv
+https://stackoverflow.com/questions/53121910/opencv-createsamples-assertion-failed-error
 https://stackoverflow.com/questions/35086142/opencv-detectmultiscale-gives-too-many-points-out-of-the-object
 
 opencv_createsamples -vec imgs/vector.vec -w 640 -h 480 -show
@@ -19,8 +20,15 @@ opencv_createsamples -vec imgs/vector.vec -w 640 -h 480 -show
 - it might be good to also create vectors of each positive image and then merge them but I don't have the merge tool atm.
 
 opencv_annotation --annotations=annotations.txt --images=positive_images
+
+// the 500 here seems liek it should be the exact number of positive samples, otherwise a parse error gets printed (but doesn't seem to disrupt anything)
 opencv_createsamples -vec positive_training_samples.vec -info annotations.txt -num 500 -bgcolor 0 -bgthresh 0 -maxxangle 1.1 -maxyangle 1.1 maxzangle 0.5 -maxidev 40 -w 300 -h 300 -show
 
+// training - make sure -w and -h match the values used for the create_samples step!!
+opencv_traincascade -data cascade_classifier -vec positive_training_samples.vec -bg negative_image_list.txt -numStages 12 -minHitRate 0.999 -maxFalseAlarmRate 0.5 -numPos 100 -numNeg 120 -w 30 -h 30 -mode ALL -precalcValBufSize 1024 -precalcIdxBufSize 1024
+
+
+opencv_traincascade -data cascade_classifier -vec positive_training_samples.vec -bg negative_image_list.txt -numStages 25 -minHitRate 0.999 -maxFalseAlarmRate 0.5 -numPos 130 -numNeg 250 -w 30 -h 30 -mode ALL -precalcValBufSize 1024 -precalcIdxBufSize 1024
 
 maybe try tensorflow?
 https://missinglink.ai/guides/tensorflow/tensorflow-face-recognition-three-quick-tutorials/
