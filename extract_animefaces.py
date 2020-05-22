@@ -23,23 +23,21 @@ def extract_anime_faces(directory):
 	images = glob.glob(f"{directory}\\*")
 
 	for img in images:
-		file_name = img[img.rindex("\\")+1:]
+		file_name = img[img.rindex("\\")+1:img.index(".p")] # ASSUMING PNG IMAGES!
 		
 		# convert image to grayscale
 		frame = cv2.imread(img, cv2.IMREAD_COLOR)
 		
 		grayscale_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 		#grayscale_img = cv2.equalizeHist(grayscale_img)
-		
 
-		# detect the face using the 4 classifiers
-		faces = face_det.detectMultiScale(grayscale_img, scaleFactor=1.05, minNeighbors=6, minSize=(30,30))
+		# detect the face features
+		faces = face_det.detectMultiScale(grayscale_img, scaleFactor=1.25, minNeighbors=5, minSize=(30,30))
 		
 		# find and save face
 		count = 0
 		for (x, y, w, h) in faces:
-			print(f"found feature for: {file_name}")
-			print(f"dimensions: x->{x}, y->{y}, w->{w}, h->{h}")
+			#print(f"dimensions: x->{x}, y->{y}, w->{w}, h->{h}")
 			feature = grayscale_img[y:y+h, x:x+w]
 			try:
 				dest = f"{directory}_extracted_dataset2"
@@ -48,10 +46,12 @@ def extract_anime_faces(directory):
 					print(f"created: {dest}")
 				
 				out = cv2.resize(feature, (350, 350))
-				cv2.imwrite(f"{dest}\{count}_{file_name}", out)
+				cv2.imwrite(f"{dest}\{file_name}_{count}.png", out)
 			except Exception as err:
 				print(f"{err}: failure for img: {file_name}")
 			count += 1
+			
+		print(f"found {count} feature(s) for: {file_name}")
 		
 		
 extract_anime_faces("anime_faces")
