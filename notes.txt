@@ -35,3 +35,6 @@ try -maxFalseAlarmRate 0.4, -minHitRate 0.995?
 
 maybe try tensorflow?
 https://missinglink.ai/guides/tensorflow/tensorflow-face-recognition-three-quick-tutorials/
+
+or this?
+https://www.pyimagesearch.com/2014/11/10/histogram-oriented-gradients-object-detection/
