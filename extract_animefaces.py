@@ -9,7 +9,7 @@ from shutil import copyfile
 
 face_det = cv2.CascadeClassifier("cascade_classifier\cascade.xml")
 
-#face_det = cv2.CascadeClassifier("OpenCV_FaceCascade\lbpcascade_animeface.xml")
+#face_det = cv2.CascadeClassifier("other_stuff\OpenCV_FaceCascade\lbpcascade_animeface.xml")
 
 #face_det = cv2.CascadeClassifier("OpenCV_FaceCascade\haarcascade_frontalface_default.xml")
 #face_det2 = cv2.CascadeClassifier("OpenCV_FaceCascade\haarcascade_frontalface_alt2.xml")
@@ -22,6 +22,7 @@ this_dir = os.path.dirname(os.path.abspath(__file__))
 def extract_anime_faces(directory):
 	images = glob.glob(f"{directory}\\*")
 
+	hits = 0
 	for img in images:
 		file_name = img[img.rindex("\\")+1:img.index(".p")] # ASSUMING PNG IMAGES!
 		
@@ -32,7 +33,7 @@ def extract_anime_faces(directory):
 		#grayscale_img = cv2.equalizeHist(grayscale_img)
 
 		# detect the face features
-		faces = face_det.detectMultiScale(grayscale_img, scaleFactor=1.25, minNeighbors=5, minSize=(30,30))
+		faces = face_det.detectMultiScale(grayscale_img, scaleFactor=1.05, minNeighbors=3, minSize=(30,30))
 		
 		# find and save face
 		count = 0
@@ -51,7 +52,12 @@ def extract_anime_faces(directory):
 				print(f"{err}: failure for img: {file_name}")
 			count += 1
 			
+		if count > 0:
+			hits += 1
+			
 		print(f"found {count} feature(s) for: {file_name}")
+		
+	print(f"found faces for {hits} images out of {len(images)}")
 		
 		
 extract_anime_faces("anime_faces")

@@ -20,6 +20,20 @@
 	- need python script for making the dataset to train on
 		- clean up images, get faces 
 		- separate by emotion (manual step)
+		
+		
+		
+	6/19/20
+	let's assume we have a satisfactory (for the most part) face detector/extractor 
+	
+	so:
+	1. make sure you have a sorted face emotion dataset to train on!
+		- this can be made easier with your supposed satisfactory face extractor 
+		- make sure there's a decent number of samples 
+	2. train the dataset 
+	3. get a new dataset to test on! these should be just a bunch of new, random images with faces.
+	4. using your face extractor, take the face, run against the recognizer we trained, and see if the output is good.
+		- we can probably expect a few false positives
 	
 """
 
