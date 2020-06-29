@@ -1,25 +1,33 @@
 # anime face classifier    
     
-I have a bunch of anime character screenshots that make excellent reaction faces but they're unorganized and I'd rather not sort them manually (I want to have them sorted by emotion).       
+I have a bunch of anime character screenshots that make excellent reaction faces but they're unorganized and I'd rather not sort them all manually (I want to have them sorted by emotion).       
     
-One significant issue is extracting anime faces from images, which is necessary for making predictions from input images (and creating my dataset).    
-The Haar classifiers that OpenCV provides don't yield very good results. I found one created by nagadomi (see acknowledgements) but haven't had much success with it either (see results below).    
+One significant issue is extracting anime faces from images, which is necessary for making predictions from input images (and creating my dataset for training the emotion recognizer).  
+      
+The Haar classifiers that OpenCV provides don't yield very good results when dealing with anime faces (surprise surprise). I found a classifier created by nagadomi (see acknowledgements) but wasn't able to get as good a yield for successful face extractions as I'd like (see results below).    
     
-my dataset that I'd like to extract faces from looks something like this:    
+**my dataset that I'd like to extract faces from looks something like this:**    
 ![all images](other_stuff/all_faces.png)    
     
-extracted faces using the cascade classifier by nagadomi:    
+**extracted faces using the cascade classifier by nagadomi:**    
 ![extracted faces](other_stuff/extracted_faces.png)    
     
-So I made my own classifier instead with 210 positive samples (you can see the samples in positive_training_samples.vec) and 633 negative samples. The classifier and its stage files are in the cascade_classifier directory. At least for me, I think my classifier turned out to be satisfactory (it was able to extract a fair number of faces from the images I fed it). It's never going to be perfect and I definitely expect to sort out some false positives.
+So I made my own classifier instead with 210 positive samples (you can see the samples in positive_training_samples.vec) and 633 negative samples. The classifier and its stage files are in the cascade_classifier directory. At least for me, I think my classifier turned out to be satisfactory enough for me (it was able to extract a fair number of faces from the images I fed it). It's never going to be perfect and I definitely expect to sort out some false positives.
 	
-here's my dataset again (there's nothing inappropriate in any of my datasets btw, just to be super transparent):    
+**here's my dataset again with a few more samples (there's nothing inappropriate in any of my datasets btw, just to be super transparent):**    
 ![all images](other_stuff/anime_faces.png)    
     
-here's the extracted faces using my classifier:    
+**the extracted faces using my classifier:**    
 ![extracted faces](other_stuff/extracted_faces2.png)    
     
-Then, from those faces that were able to be extracted, I sorted them into emotions like happy, sad, neutral, angry, etc. Although the number of images for some emotions were quite small, after training the recognizer for 20 cycles, I got some surprisingly decent results when testing on the images in test_data/. Some of those images were the ones trained on, which I suppose should not be surprising that they got sorted properly but there were some new images that got sorted correctly. So I think this is a decent start to accomplishing my goal. The next best thing to do would probably be to get more data to train an even more accurate recognizer! :)       
+Then, from those faces that were able to be extracted, I sorted them manually into emotions like happy, sad, neutral, angry, etc which made up my dataset for training my emotion recognizer using the Fisherface method. Running `python training.py` trains the emotion recognizer and then takes the images in test_data and sorts them.    
+    
+## Results    
+I think my classifier turned out alright, so that's cool. As for my original goal, the results haven't been good so far with regards to the sorting accuracy but I think that's because of a lack of sufficient data to train on and also in part due to the effectiveness of my classifier. I should spend some more time collecting more data to train on before coming to a conclusion on the effectiveness of my program.    
+    
+One challenge is finding the right balance of classifier parameters to detect faces with(i.e. scaleFactor and minNeighbors for the detectMultiScale method). Another challenge I think is the fact that since anime faces are hand drawn, there is a lot more room for variability compared to human faces, which makes classification a lot harder. Lastly, just finding usable data is a challenge since not all images will have faces properly detected.    
+    
+But it's still fun to see how far one can go with this since you never know if you don't try ;).    
     
 ## Acknowledgements:    
 https://github.com/nagadomi/lbpcascade_animeface for providing an anime face cascade classifier to try out.    
@@ -31,7 +39,7 @@ http://www.paulvangent.com/2016/04/01/emotion-recognition-with-python-opencv-and
     
 If you're interested in following Paul's tutorial, I can recommend the dataset provided here: https://zenodo.org/record/3451524#.XpH8LchKiUk.    
 	
-And of course the various anime I got images in anime_faces/ from (I haven't actually watched all of these - just saw some clips for some):   
+And of course the various anime I got images from (I haven't actually watched all of these - just saw some clips for some):   
 - ひとりぼっちの○○生活
 - ポケットモンスター サン＆ムーン
 - らき☆すた
@@ -70,6 +78,14 @@ And of course the various anime I got images in anime_faces/ from (I haven't act
 - 俺を好きなのはお前だけかよ
 - 鬼滅の刃
 - 三ツ星カラーズ
+- 三者三葉
+- ニューゲーム
+- ＨＵＧっと！プリキュア
+- あそびあそばせ
+- ゆるゆり さん☆ハイ！
+- ガーリッシュ ナンバー
+- ReLIFE
+- SPY x FAMILY (manga)
     
 I think that's all of them. sorry if I forgot any!    
 

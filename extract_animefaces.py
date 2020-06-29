@@ -1,5 +1,4 @@
 # just get the faces 
-# https://stackoverflow.com/questions/8535650/how-to-change-saturation-values-with-opencv
 
 import cv2
 import glob
@@ -8,13 +7,6 @@ import numpy as np
 from shutil import copyfile
 
 face_det = cv2.CascadeClassifier("cascade_classifier\cascade.xml")
-
-#face_det = cv2.CascadeClassifier("other_stuff\OpenCV_FaceCascade\lbpcascade_animeface.xml")
-
-#face_det = cv2.CascadeClassifier("OpenCV_FaceCascade\haarcascade_frontalface_default.xml")
-#face_det2 = cv2.CascadeClassifier("OpenCV_FaceCascade\haarcascade_frontalface_alt2.xml")
-#face_det3 = cv2.CascadeClassifier("OpenCV_FaceCascade\haarcascade_frontalface_alt.xml")
-#face_det4 = cv2.CascadeClassifier("OpenCV_FaceCascade\haarcascade_frontalface_alt_tree.xml")
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 
