@@ -1,3 +1,11 @@
+emotion recognition stuff:
+-------------------------
+http://www.paulvangent.com/2016/04/01/emotion-recognition-with-python-opencv-and-a-face-dataset/
+https://zenodo.org/record/3451524#.XovSB4hKiUk
+http://vision.ucsd.edu/~iskwak/ExtYaleDatabase/ExtYaleB.html
+
+cascade classifier stuff:
+------------------------
 https://www.cs.auckland.ac.nz/~m.rezaei/Tutorials/Creating_a_Cascade_of_Haar-Like_Classifiers_Step_by_Step.pdf
 https://coding-robin.de/2013/07/22/train-your-own-opencv-haar-classifier.html
 https://memememememememe.me/post/training-haar-cascades/
@@ -38,3 +46,14 @@ https://missinglink.ai/guides/tensorflow/tensorflow-face-recognition-three-quick
 
 or this?
 https://www.pyimagesearch.com/2014/11/10/histogram-oriented-gradients-object-detection/
+
+
+other helpful links:
+# https://stackoverflow.com/questions/47202316/saving-opencv-object-in-memory-in-python
+# https://stackoverflow.com/questions/46968477/opencv3-python-3-how-to-train-fisherfacerecognizer-dataset
+# https://stackoverflow.com/questions/20801015/recommended-values-for-opencv-detectmultiscale-parameters
+# http://www.willberger.org/cascade-haar-explained/
+# https://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html
+# https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html
+# https://github.com/nagadomi/lbpcascade_animeface
+# https://freedomofkeima.com/blog/posts/flag-15-image-recognition-for-anime-characters

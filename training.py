@@ -1,13 +1,12 @@
-# http://www.paulvangent.com/2016/04/01/emotion-recognition-with-python-opencv-and-a-face-dataset/
-# https://stackoverflow.com/questions/47202316/saving-opencv-object-in-memory-in-python
-# https://stackoverflow.com/questions/46968477/opencv3-python-3-how-to-train-fisherfacerecognizer-dataset
-# https://stackoverflow.com/questions/20801015/recommended-values-for-opencv-detectmultiscale-parameters
-# http://www.willberger.org/cascade-haar-explained/
-# https://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html
-# https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html
+"""
+get_images, 
+make_sets and 
+run_recognizer functions came from Paul van Gent's tutorial:
 
-# oooooooh: https://github.com/nagadomi/lbpcascade_animeface
-# https://freedomofkeima.com/blog/posts/flag-15-image-recognition-for-anime-characters
+van Gent, P. (2016). Emotion Recognition With Python, OpenCV and a Face Dataset. A tech blog about fun things with Python and embedded electronics. Retrieved from:
+http://www.paulvangent.com/2016/04/01/emotion-recognition-with-python-opencv-and-a-face-dataset/
+
+"""
 
 """
 	step 1: get dataset
@@ -34,18 +33,82 @@
 	3. get a new dataset to test on! these should be just a bunch of new, random images with faces.
 	4. using your face extractor, take the face, run against the recognizer we trained, and see if the output is good.
 		- we can probably expect a few false positives
-	
 """
 
 import cv2
 import glob
 import os
+import random
+import numpy as np
+from extract_animefaces import *
 from shutil import copyfile
 
-# raw dataset needs to be sorted first by emotion 
-# then this can be used to create a clean dataset for training
-def create_training_set(directory):
-	pass
+this_dir = os.path.dirname(os.path.abspath(__file__))
+
+emotions = ['happy','sad','surprised','angry','scared','worried','neutral']
+
+fisher_face = cv2.face.FisherFaceRecognizer_create()
+
+	
+def get_images(emotion):
+	images = glob.glob(f"emotions_dataset\{emotion}\*.png")
+	random.shuffle(images)
+	training = images[:int(len(images) * 0.8)]
+	prediction = images[-int(len(images) * 0.2):]
+	return training, prediction
+
+def make_sets():
+	training_data = []
+	training_labels = []
+	prediction_data = []
+	prediction_labels = []
+	
+	for emotion in emotions:
+		training, prediction = get_images(emotion)
+		
+		for item in training:
+			image = cv2.imread(item)
+			grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+			training_data.append(grayscale)
+			training_labels.append(emotions.index(emotion))
+		
+		for item in prediction:
+			image = cv2.imread(item)
+			grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+			prediction_data.append(grayscale)
+			prediction_labels.append(emotions.index(emotion))
+			
+	return training_data, training_labels, prediction_data, prediction_labels
+		
+def run_recognizer():
+	training_data, training_labels, prediction_data, prediction_labels = make_sets()
+	print("training fisher face classifier...")
+	print(f"size of training set is: {len(training_labels)} images")
+	fisher_face.train(training_data, np.asarray(training_labels))
+	
+	print("predicting classification set...")
+	count = 0
+	correct = 0
+	incorrect = 0
+	for image in prediction_data:
+		pred, conf = fisher_face.predict(image)
+		if pred == prediction_labels[count]:
+			correct += 1
+		else:
+			incorrect += 1
+		count += 1
+	return ((100*correct)/(correct + incorrect))
+	
+
+######## do the training for the recognizer 
+metascore = []
+for i in range(0,20):
+	print(f"training recognizer: stage {i}")
+	correct = run_recognizer()
+	print(f"run {i+1}: got {correct}% correct!")
+	metascore.append(correct)
+
+
 
 def sort_images_by_emotion(folder_path, emotions, recognizer):
 	# but waitttt! the recognizer defines what emotions it can predict
@@ -72,7 +135,13 @@ def sort_images_by_emotion(folder_path, emotions, recognizer):
 			print(f"no face found for: {image}")
 			continue
 		pred, conf = recognizer.predict(img)
-		# based on pred, put image in folder (the original image!)
+		# based on pred, put image in folder (a copy of the original image!)
+		print(f"classifying {file_name} as {emotions[pred]}!") 
 		copyfile(image, f"{this_dir}\{folder_name}_sorted\{emotions[pred]}\{file_name}")
 
 	print("done!")
+	
+	
+	
+####### try out the recognizer on new data
+sort_images_by_emotion("test_data\\", emotions, fisher_face)
