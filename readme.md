@@ -12,8 +12,8 @@ The Haar classifiers that OpenCV provides don't yield very good results when dea
 **extracted faces using the cascade classifier by nagadomi:**    
 ![extracted faces](other_stuff/extracted_faces.png)    
     
-So I made my own classifier instead with 210 positive samples (you can see the samples in positive_training_samples.vec) and 633 negative samples. The classifier and its stage files are in the cascade_classifier directory. At least for me, I think my classifier turned out to be satisfactory enough for me (it was able to extract a fair number of faces from the images I fed it). It's never going to be perfect and I definitely expect to sort out some false positives.
-	
+So I made my own classifier instead with 210 positive samples (you can see the samples in positive_training_samples.vec) and 633 negative samples. The classifier and its stage files are in the cascade_classifier directory. At least for me, I think my classifier turned out to be satisfactory enough (it was able to extract a fair number of faces from the images I fed it). It's never going to be perfect and I definitely expect to sort out some false positives.    
+    
 **here's my dataset again with a few more samples (there's nothing inappropriate in any of my datasets btw, just to be super transparent):**    
 ![all images](other_stuff/anime_faces.png)    
     
@@ -29,6 +29,18 @@ One challenge is finding the right balance of classifier parameters to detect fa
     
 But it's still fun to see how far one can go with this since you never know if you don't try ;).    
     
+## quick cascade classifier how-to summary    
+For creating my classifier, this is what I did:    
+- I installed OpenCV 3.4.7, which contains some useful executables like opencv_annotation and opencv_createsamples. Note that the latest OpenCV versions don't seem to have all of those executables!
+- collected all the positive samples I could (in this case, faces) into one folder.
+- also collected a bunch of negative images into another folder. I created a text file listing all the negative images as well, which is needed in the training step (in my case it was called negative_image_list.txt).
+- ran `opencv_annotation --annotations=annotations.txt --images=positive_images`, which will allow you to go through each image in your folder (called positive_images in my case) and specify the region of interest. This region will be recorded in a text file called annotations.txt in my example.
+- ran `opencv_createsamples -vec positive_training_samples.vec -info annotations.txt -num 210 -bgcolor 0 -bgthresh 0 -maxxangle 1.1 -maxyangle 1.1 maxzangle 0.5 -maxidev 40 -w 30 -h 30`, which produces a .vec file containing all your positive samples with just the region you specified in your annotations. Note that the -num param should match the number of images you annotated.
+- then the actual training! I ran `opencv_traincascade -data cascade_classifier -vec positive_training_samples.vec -bg negative_image_list.txt -numStages 15 -minHitRate 0.999 -maxFalseAlarmRate 0.3 -numPos 110 -numNeg 150 -w 30 -h 30 -mode ALL -precalcValBufSize 1024 -precalcIdxBufSize 1024`.
+- now I can extract anime faces!
+    
+The tutorial (https://docs.opencv.org/2.4/doc/user_guide/ug_traincascade.html) in the OpenCV docs is pretty good.    
+	
 ## Acknowledgements:    
 https://github.com/nagadomi/lbpcascade_animeface for providing an anime face cascade classifier to try out.    
     
