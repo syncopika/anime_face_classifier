@@ -31,7 +31,7 @@ But it's still fun to see how far one can go with this since you never know if y
     
 ## quick cascade classifier how-to summary    
 For creating my classifier, this is what I did:    
-- I installed OpenCV 3.4.7, which contains some useful executables like opencv_annotation and opencv_createsamples. Note that the latest OpenCV versions don't seem to have all of those executables!
+- I installed OpenCV 3.4.7, which contains some useful executables like opencv_annotation and opencv_createsamples. Note that the latest OpenCV version doesn't seem to have all of those executables!
 - collected all the positive samples I could (in this case, faces) into one folder.
 - also collected a bunch of negative images into another folder. I created a text file listing all the negative images as well, which is needed in the training step (in my case it was called negative_image_list.txt).
 - ran `opencv_annotation --annotations=annotations.txt --images=positive_images`, which will allow you to go through each image in your folder (called positive_images in my case) and specify the region of interest. This region will be recorded in a text file called annotations.txt in my example.
